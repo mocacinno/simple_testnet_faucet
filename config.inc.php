@@ -13,6 +13,7 @@ $mintimebetweenclaims = 36;
 $claimamount = 1000000;
 $payouttime = "sunday afternoon at 4:02 UTC";
 $account="";
+$minsend = 2000000;
 
 //do not edit below this line
 $conn = new mysqli($mysqlhost, $mysqluser, $mysqlpass, $mysqldb);

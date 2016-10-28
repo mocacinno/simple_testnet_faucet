@@ -2,7 +2,8 @@
 require_once('easybitcoin.php');
 require_once('config.inc.php');
 $bitcoin = new Bitcoin($rpcuser,$rpcpass,$rpchost,$rpcport);
-$stmt = $conn->prepare("select address, (sum(amount))/100000000 as amount from faucet where payed = 0 group by address");
+$stmt = $conn->prepare("select address, (sum(amount))/100000000 as amount from faucet where payed = 0 group by address having sum(amount) > ?");
+$stmt->bind_param("s", $minsend);
 $stmt->execute();
 $stmt->bind_result($address, $amount);
 $totaal = 0;
@@ -27,11 +28,12 @@ else
 {
 	echo "payments done with tx $tx<br>\n";
 }
-$stmt = $conn->prepare("update faucet set txid = ? where payed = 0");
-$stmt->bind_param("s", $tx);
+$stmt = $conn->prepare("update faucet set txid = ? where payed = 0 and address in (select address from faucet where payed = 0 group by address having sum(amount) > ?");
+$stmt->bind_param("ss", $tx, $minsend);
 $stmt->execute();
 $stmt->close();
-$stmt = $conn->prepare("update faucet set payed = 1 where payed = 0");
+$stmt = $conn->prepare("update faucet set payed = 1 where payed = 0 and address in (select address from faucet where payed = 0 group by address having sum(amount) > ?");
+$stmt->bind_param("s", $minsend);
 $stmt->execute();
 $stmt->close();
 $conn->close();
