@@ -1,9 +1,15 @@
 <?php
 require_once('config.inc.php');
+require_once('easybitcoin.php');
+$bitcoin = new Bitcoin($rpcuser,$rpcpass,$rpchost,$rpcport);
 $time = time();
 $ip = $_SERVER['REMOTE_ADDR'];
 $address = $_POST['address'];
-
+$isvalid = $bitcoin->validateaddress($address);
+if (!$isvalid['isvalid'])
+{
+	die("invalid address format");
+}
 $stmt = $conn->prepare("select timestamp from faucet where ip = ? order by timestamp desc limit 1");
 $stmt->bind_param("s", $ip); 
 $stmt->execute();
