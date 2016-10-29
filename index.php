@@ -1,6 +1,6 @@
 <?php
-require_once('easybitcoin.php');
-require_once('config.inc.php');
+require_once('includes/easybitcoin.php');
+require_once('includes/config.inc.php');
 $bitcoin = new Bitcoin($rpcuser,$rpcpass,$rpchost,$rpcport);
 $info= $bitcoin->getinfo();
 echo "<h1>info about the wallet!</h1><pre>";

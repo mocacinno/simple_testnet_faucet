@@ -1,6 +1,6 @@
 <?php
-require_once('config.inc.php');
-require_once('easybitcoin.php');
+require_once('includes/config.inc.php');
+require_once('includes/easybitcoin.php');
 $bitcoin = new Bitcoin($rpcuser,$rpcpass,$rpchost,$rpcport);
 $time = time();
 $ip = $_SERVER['REMOTE_ADDR'];
